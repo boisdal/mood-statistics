@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_stepper"
+    app:startDestination="@id/navigation_newentry1">
+
+    <fragment
+        android:id="@+id/navigation_newentry1"
+        android:name="fr.bwadaal.moodstatistics.ui.newentry.NewentryFragment"
+        android:label="@string/title_newentry1" />
+
+    <fragment
+        android:id="@+id/navigation_newentry2"
+        android:name="fr.bwadaal.moodstatistics.ui.newentry.NewentryFragment"
+        android:label="@string/title_newentry2" />
+
+    <fragment
+        android:id="@+id/navigation_newentry3"
+        android:name="fr.bwadaal.moodstatistics.ui.newentry.NewentryFragment"
+        android:label="@string/title_newentry3" />
+
+</navigation>

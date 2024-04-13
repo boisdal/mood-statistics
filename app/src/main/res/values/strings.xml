@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Mood statistics</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_newentry">New Entry</string>
+    <string name="title_newentry1">New Entry 1</string>
+    <string name="title_newentry2">New Entry 2</string>
+    <string name="title_newentry3">New Entry 3</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+</resources>
