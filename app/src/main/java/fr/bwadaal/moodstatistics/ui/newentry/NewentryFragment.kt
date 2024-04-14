@@ -26,6 +26,14 @@ class NewentryFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var containerLayout: LinearLayout
+    private lateinit var previousButton: Button
+    private lateinit var nextButton: Button
+    private lateinit var steps: Array<View>
+    private lateinit var stepIndicators: Array<TextView?>
+    private lateinit var stepIndicatorsLayout: LinearLayout
+    private var currentStep = 0
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -42,27 +50,26 @@ class NewentryFragment : Fragment() {
             textView.text = it
         }
 
-        var containerLayout = binding.containerLayout;
-        var previousButton = binding.previousButton;
-        var nextButton = binding.nextButton;
-        var stepIndicatorsLayout = binding.stepIndicatorsLayout;
-        var currentStep = 0
+        containerLayout = binding.containerLayout;
+        previousButton = binding.previousButton;
+        nextButton = binding.nextButton;
+        stepIndicatorsLayout = binding.stepIndicatorsLayout;
 
-        var steps = arrayOf<View>(
+        steps = arrayOf<View>(
             LayoutInflater.from(root.context).inflate(R.layout.fragment_moodrating, containerLayout, false),
             LayoutInflater.from(root.context).inflate(R.layout.fragment_sleeprating, containerLayout, false),
             LayoutInflater.from(root.context).inflate(R.layout.fragment_factorlisting, containerLayout, false)
         )
 
-        var stepIndicators = initializeStepIndicators(steps, root.context, stepIndicatorsLayout);
-        showCurrentStep(containerLayout, steps, currentStep, previousButton, nextButton, stepIndicators);
+        stepIndicators = initializeStepIndicators(root.context);
+        showCurrentStep();
 
 
         // Seting click listener for previous button
         previousButton.setOnClickListener {
             if (currentStep > 0) {
                 currentStep--
-                showCurrentStep(containerLayout, steps, currentStep, previousButton, nextButton, stepIndicators)
+                showCurrentStep()
             }
         }
 
@@ -70,7 +77,7 @@ class NewentryFragment : Fragment() {
         nextButton.setOnClickListener {
             if (currentStep < steps.size - 1) {
                 currentStep++
-                showCurrentStep(containerLayout, steps, currentStep, previousButton, nextButton, stepIndicators)
+                showCurrentStep()
             } else {
                 // When Last step reached submit the form
                 submitForm(root.context)
@@ -85,7 +92,7 @@ class NewentryFragment : Fragment() {
         _binding = null
     }
 
-    private fun initializeStepIndicators(steps: Array<View>, context: Context, stepIndicatorsLayout: LinearLayout): Array<TextView?> {
+    private fun initializeStepIndicators(context: Context): Array<TextView?> {
         var stepIndicators = arrayOfNulls<TextView>(steps.size)
         for (i in 0 until steps.size) {
             val stepIndicator = TextView(context)
@@ -108,7 +115,7 @@ class NewentryFragment : Fragment() {
             stepIndicatorsLayout.addView(stepIndicator)
             stepIndicators[i] = stepIndicator
             if (i < steps.size - 1) {
-                addArrowIndicator(stepIndicatorsLayout, context)
+                addArrowIndicator(context)
             }
         }
         return stepIndicators
@@ -116,7 +123,7 @@ class NewentryFragment : Fragment() {
 
 
     // Adding arrow indicator between step indicators
-    private fun addArrowIndicator(stepIndicatorsLayout: LinearLayout, context: Context) {
+    private fun addArrowIndicator(context: Context) {
         val arrow = ImageView(context)
         // to add this create a new drawable resource file in res->drawable
         arrow.setImageResource(com.google.android.material.R.drawable.ic_arrow_back_black_24)
@@ -131,18 +138,18 @@ class NewentryFragment : Fragment() {
 
 
     // Showing the current step
-    private fun showCurrentStep(containerLayout: LinearLayout, steps: Array<View>, currentStep: Int, previousButton: Button, nextButton: Button, stepIndicators: Array<TextView?>) {
+    private fun showCurrentStep() {
         containerLayout.removeAllViews()
         containerLayout.addView(steps.get(currentStep))
         // If Current Step is greater then 0 then making Previous Button Visible
         previousButton.setVisibility(if (currentStep > 0) View.VISIBLE else View.INVISIBLE)
         nextButton.setText(if (currentStep < steps.size - 1) "Next" else "Submit")
-        updateStepIndicators(stepIndicators, currentStep)
+        updateStepIndicators()
     }
 
 
     // Updating the step indicators to highlight the current step
-    private fun updateStepIndicators(stepIndicators: Array<TextView?>, currentStep: Int) {
+    private fun updateStepIndicators() {
         for (i in 0 until stepIndicators.size) {
             if (i == currentStep) {
                 stepIndicators.get(i)?.setBackgroundResource(R.drawable.circle_green)
